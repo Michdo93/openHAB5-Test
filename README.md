@@ -329,6 +329,38 @@ EOF
 
 ---
 
+## 🧪 8. Python Libraries hinzufügen
+
+Finde heraus, wo openHAB seine Automation-Umgebung installiert hat:
+
+```bash
+sudo find /var/lib/openhab -type d -name "site-packages"
+```
+
+Ein typischer Pfad ist zum Beispiel:
+
+```bash
+/var/lib/openhab/.cache/org.graalvm.polyglot/python/python-home/3fe684bec8ba537cb2b83ce56e79ca177f1e0290/lib/python3.11/site-packages
+```
+
+Wenn du mehrere Pakete brauchst oder öfter arbeitest, kannst du dir z. B. eine Umgebungsvariable setzen:
+
+```bash
+export OH_SITE_PACKAGES=/var/lib/openhab/.cache/org.graalvm.polyglot/python/python-home/3fe684bec8ba537cb2b83ce56e79ca177f1e0290/lib/python3.11/site-packages
+```
+
+Im nächsten Schritt stellen wir sicher, dass `pip3` auch wirklich systemweit installiert ist:
+
+```bash
+sudo apt install -y python3-pip
+```
+
+Neue Pakete kannst du absofort wie folgt installieren:
+
+```bash
+sudo -u openhab /usr/bin/python3 -m pip install --target=$OH_SITE_PACKAGES <paketname>
+```
+
 ## ✅ Zusammenfassung
 
 | Komponente      | Version / Status                     |
