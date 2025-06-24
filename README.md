@@ -164,6 +164,7 @@ sshpass -p habopen ssh -p 8101 -o StrictHostKeyChecking=no openhab@localhost 'fe
 Wir führen folgendes aus:
 
 ```bash
+sudo systemctl stop openhab
 sudo sed -i '/^EXTRA_JAVA_OPTS=/d' /etc/default/openhab && echo -e 'EXTRA_JAVA_OPTS="\n  -XX:+UnlockExperimentalVMOptions\n  -XX:+EnableJVMCI\n  -XX:+UseG1GC\n  -Dpolyglot.engine.WarnInterpreterOnly=false\n  -Dfile.encoding=UTF-8\n  -Xms256m -Xmx1024m\n  -Duser.timezone=Europe/Berlin\n"' | sudo tee -a /etc/default/openhab
 ```
 
@@ -185,7 +186,7 @@ Dann:
 
 ```bash
 sudo rm -rf /var/lib/openhab/tmp/* && sudo rm -rf /var/lib/openhab/cache/*
-sudo systemctl restart openhab
+sudo systemctl start openhab
 ```
 
 ---
