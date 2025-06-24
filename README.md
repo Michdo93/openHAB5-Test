@@ -222,6 +222,23 @@ EOF
 sudo journalctl -u openhab -f
 ```
 
+### 🔹 openHAB Static Examples
+
+Im nächsten Schritt installieren wie die openHAB Static Examples:
+
+```bash
+cd ~
+git clone https://github.com/Michdo93/openhab_static_examples
+cd openhab_static_examples
+rm -r rules/*
+sudo cp -r * /etc/openhab
+cd ..
+sudo rm -r openhab_static_examples
+sudo chown -R openhab:openhab /etc/openhab
+```
+
+
+
 ---
 
 ## ✅ Zusammenfassung
