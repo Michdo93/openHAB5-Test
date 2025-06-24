@@ -195,21 +195,23 @@ sudo systemctl start openhab
 
 ### 🔹 Beispielregel (Datei: `hello.py` im scripts-Ordner)
 
-```python
-from core.rules import rule
-from core.triggers import when
-from core.log import logging
-
-log = logging.getLogger("HelloPython")
-
-@rule("Hello Rule")
-@when("System started")
-def hello(event):
-    log.info("✅ Python 3.11 läuft mit GraalVM & openHAB 5!")
+```bash
+sudo mkdir -p /etc/openhab/automation/python/personal
+sudo touch /etc/openhab/automation/python/personal/hello.py
+sudo chown -R openhab:openhab /etc/openhab/automation/python/personal/hello.py
 ```
 
-Speichern unter:
-`/etc/openhab/automation/jsr223/python/personal/hello.py`
+```python
+cat << 'EOF' | sudo tee /etc/openhab/automation/python/personal/hello.py > /dev/null
+from openhab import rule
+from openhab.triggers import GenericCronTrigger
+
+@rule( triggers = [ GenericCronTrigger("*/5 * * * * ?") ] )
+class Test:
+    def execute(self, module, input):
+        self.logger.info("Rule was triggered")
+EOF
+```
 
 > Logausgabe prüfen:
 
@@ -231,5 +233,3 @@ sudo journalctl -u openhab -f
 | Zukunftssicher? | ✅ Voll auf Java 21 + Python 3        |
 
 ---
-
-Wenn du magst, helfe ich dir im nächsten Schritt beim **Migrieren von Jython-Skripten** oder beim **Profiling langsamer Regeln**.
