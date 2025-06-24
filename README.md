@@ -306,28 +306,17 @@ from scope             import NULL                      # Konstanten (ON, OFF, N
 @rule(triggers=[GenericCronTrigger("0 0/1 * * * ?")])
 class Cron:
     def execute(self, module, input):
-
-        # 1) Items auf NULL setzen
-        demo_items = (
-            "testColor", "testContact", "testDateTime", "testDimmer",
-            "testNumber", "testPlayer", "testRollershutter", "testString",
-            "testSwitch", "testLocation", "testImage"
-        )
-        for name in demo_items:
-            Registry.getItem(name).postUpdate(NULL)
-
-        # 2) Beispiel-Werte schreiben
-        Registry.getItem("testColor").postUpdate("120,100,100")
-        Registry.getItem("testContact").postUpdate("CLOSED")
+        Registry.getItem("testColor").postUpdate("0,100,100")
+        Registry.getItem("testContact").postUpdate("OPEN")
         Registry.getItem("testDateTime").postUpdate(
             datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f%z")
         )
-        Registry.getItem("testDimmer").postUpdate("90")
-        Registry.getItem("testNumber").postUpdate("50")
-        Registry.getItem("testPlayer").postUpdate("PAUSE")
-        Registry.getItem("testRollershutter").postUpdate("0")
-        Registry.getItem("testString").postUpdate("Hello World")
-        Registry.getItem("testSwitch").postUpdate("OFF")
+        Registry.getItem("testDimmer").postUpdate("30")
+        Registry.getItem("testNumber").postUpdate("0")
+        Registry.getItem("testPlayer").postUpdate("PLAY")
+        Registry.getItem("testRollershutter").postUpdate("100")
+        Registry.getItem("testString").postUpdate("Hello")
+        Registry.getItem("testSwitch").postUpdate("ON")
 
         # Location als einfacher lat,lon,alt-String genügt
         Registry.getItem("testLocation").postUpdate(
