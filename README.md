@@ -133,6 +133,9 @@ sudo sed -i '/^EXTRA_JAVA_OPTS=/d' /etc/default/openhab && echo 'EXTRA_JAVA_OPTS
 
 ## 🧠 5. Python 3 Binding installieren (GraalPy)
 
+> [!WARNING]  
+> Es darf nicht gleichzeitig JS Scripting installiert sein!
+
 > In der **Main UI**:
 > → *Settings* → *Add-on Store* → *Automation* →
 > 🔍 **“Python 3 Scripting”** → Installieren
