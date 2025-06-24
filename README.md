@@ -139,10 +139,22 @@ sudo sed -i '/^EXTRA_JAVA_OPTS=/d' /etc/default/openhab && echo 'EXTRA_JAVA_OPTS
 
 **Alternativ per Konsole:**
 
+Zunächst installieren wir sshpass:
+
 ```bash
-openhab-cli console
-# login: openhab / habopen (Standard)
-feature:install openhab-automation-pythonscripting
+sudo apt install -y sshpass
+```
+
+Dann fügen wir den Fingerprint automatisch hinzu und speichern ihn:
+
+```bash
+sshpass -p habopen ssh -p 8101 -o StrictHostKeyChecking=accept-new openhab@localhost 'exit'
+```
+
+Zuletzt installieren wir das Binding:
+
+```bash
+sshpass -p habopen ssh -p 8101 -o StrictHostKeyChecking=no openhab@localhost 'feature:install openhab-automation-pythonscripting'
 ```
 
 ---
