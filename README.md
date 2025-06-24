@@ -168,7 +168,7 @@ Wir führen folgendes aus:
 
 ```bash
 sudo systemctl stop openhab
-sudo sed -i '/^EXTRA_JAVA_OPTS=/d' /etc/default/openhab && echo -e 'EXTRA_JAVA_OPTS="\n  -XX:+UnlockExperimentalVMOptions\n  -XX:+EnableJVMCI\n  -XX:+UseG1GC\n  -Dpolyglot.engine.WarnInterpreterOnly=false\n  -Dfile.encoding=UTF-8\n  -Xms256m -Xmx1024m\n  -Duser.timezone=Europe/Berlin\n"' | sudo tee -a /etc/default/openhab
+sudo sed -i '/^EXTRA_JAVA_OPTS=/d' /etc/default/openhab && echo -e 'EXTRA_JAVA_OPTS="\n  -XX:+UnlockExperimentalVMOptions\n  -XX:+EnableJVMCI\n  -XX:+UseG1GC\n  -Dpolyglot.engine.WarnInterpreterOnly=false\n  -Dfile.encoding=UTF-8\n  -Xms256m -Xmx1024m\n  -Duser.timezone=Europe/Berlin\n  -Dpython.NativeModules=false\n  -Dpython.ForceIsolation=false\n"' | sudo tee -a /etc/default/openhab
 ```
 
 Dies erstellt folgendes:
@@ -182,6 +182,8 @@ EXTRA_JAVA_OPTS="
   -Dfile.encoding=UTF-8
   -Xms256m -Xmx1024m
   -Duser.timezone=Europe/Berlin
+  -Dpython.NativeModules=false
+  -Dpython.ForceIsolation=false
 "
 ```
 
@@ -325,6 +327,12 @@ class Cron:
 
         self.logger.info("Cron rule executed successfully.")
 EOF
+```
+
+Für die Rules benötigt man das `requests`-Paket:
+
+```bash
+sudo -u openhab /usr/bin/python3 -m pip install --target=$OH_SITE_PACKAGES requests
 ```
 
 ---
