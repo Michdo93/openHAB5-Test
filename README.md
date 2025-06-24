@@ -361,6 +361,12 @@ Neue Pakete kannst du absofort wie folgt installieren:
 sudo -u openhab /usr/bin/python3 -m pip install --target=$OH_SITE_PACKAGES <paketname>
 ```
 
+Im nächsten Schritt erlauben wir, dass System-Packages überschrieben werden dürfen.
+
+```bash
+sudo -u openhab python3 -m pip config set global.break-system-packages true
+```
+
 ## ✅ Zusammenfassung
 
 | Komponente      | Version / Status                     |
