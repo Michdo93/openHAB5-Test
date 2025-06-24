@@ -161,16 +161,15 @@ sshpass -p habopen ssh -p 8101 -o StrictHostKeyChecking=no openhab@localhost 'fe
 
 ## 🚀 6. JVM für Performance optimieren
 
-Bearbeite die Datei:
+Wir führen folgendes aus:
 
 ```bash
-sudo nano /etc/default/openhab
+sudo sed -i '/^EXTRA_JAVA_OPTS=/d' /etc/default/openhab && echo -e 'EXTRA_JAVA_OPTS="\n  -XX:+UnlockExperimentalVMOptions\n  -XX:+EnableJVMCI\n  -XX:+UseG1GC\n  -Dpolyglot.engine.WarnInterpreterOnly=false\n  -Dfile.encoding=UTF-8\n  -Xms256m -Xmx1024m\n  -Duser.timezone=Europe/Berlin\n"' | sudo tee -a /etc/default/openhab
 ```
 
-Füge/ändere folgende Zeilen:
+Dies erstellt folgendes:
 
 ```ini
-JAVA_HOME="/usr/lib/jvm/graalvm21"
 EXTRA_JAVA_OPTS="
   -XX:+UnlockExperimentalVMOptions
   -XX:+EnableJVMCI
@@ -185,6 +184,7 @@ EXTRA_JAVA_OPTS="
 Dann:
 
 ```bash
+sudo rm -rf /var/lib/openhab/tmp/* && sudo rm -rf /var/lib/openhab/cache/*
 sudo systemctl restart openhab
 ```
 
