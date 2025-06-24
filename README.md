@@ -237,7 +237,106 @@ sudo rm -r openhab_static_examples
 sudo chown -R openhab:openhab /etc/openhab
 ```
 
+Da die Rules dort als DSL Rules geschrieben sind löschen wir diese und erstellen unsere Python-Rules manuell neu:
 
+```bash
+sudo mkdir -p /etc/openhab/automation/python/personal
+sudo touch /etc/openhab/automation/python/personal/static.py
+sudo touch /etc/openhab/automation/python/personal/cron.py
+sudo chown -R openhab:openhab /etc/openhab/automation/python/personal
+```
+
+Für den Systemstart:
+
+```python
+cat << 'EOF' | sudo tee /etc/openhab/automation/python/personal/static.py > /dev/null
+from datetime import datetime
+from openhab           import rule, Registry
+from openhab.triggers  import SystemStartlevelTrigger   # Startlevel-Trigger
+from scope             import NULL                      # Konstanten (ON, OFF, NULL)
+
+# --------------------------------------------------------------------
+
+@rule(triggers=[SystemStartlevelTrigger(100)])          # Level 100 = „System ready“
+class Started:
+    def execute(self, module, input):
+
+        # 1) Items auf NULL setzen
+        demo_items = (
+            "testColor", "testContact", "testDateTime", "testDimmer",
+            "testNumber", "testPlayer", "testRollershutter", "testString",
+            "testSwitch", "testLocation", "testImage"
+        )
+        for name in demo_items:
+            Registry.getItem(name).postUpdate(NULL)
+
+        # 2) Beispiel-Werte schreiben
+        Registry.getItem("testColor").postUpdate("120,100,100")
+        Registry.getItem("testContact").postUpdate("CLOSED")
+        Registry.getItem("testDateTime").postUpdate(
+            datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f%z")
+        )
+        Registry.getItem("testDimmer").postUpdate("90")
+        Registry.getItem("testNumber").postUpdate("50")
+        Registry.getItem("testPlayer").postUpdate("PAUSE")
+        Registry.getItem("testRollershutter").postUpdate("0")
+        Registry.getItem("testString").postUpdate("Hello World")
+        Registry.getItem("testSwitch").postUpdate("OFF")
+
+        # Location als einfacher lat,lon,alt-String genügt
+        Registry.getItem("testLocation").postUpdate(
+            "48.051437316054006,8.207755911376244,857.0"
+        )
+
+        self.logger.info("Started rule executed successfully.")
+EOF
+```
+
+Für den Cronjob:
+
+```python
+cat << 'EOF' | sudo tee /etc/openhab/automation/python/personal/cron.py > /dev/null
+from datetime import datetime
+from openhab           import rule, Registry
+from openhab.triggers  import GenericCronTrigger   # Startlevel-Trigger
+from scope             import NULL                      # Konstanten (ON, OFF, NULL)
+
+# --------------------------------------------------------------------
+
+@rule(triggers=[GenericCronTrigger("0 0/1 * * * ?")])
+class Cron:
+    def execute(self, module, input):
+
+        # 1) Items auf NULL setzen
+        demo_items = (
+            "testColor", "testContact", "testDateTime", "testDimmer",
+            "testNumber", "testPlayer", "testRollershutter", "testString",
+            "testSwitch", "testLocation", "testImage"
+        )
+        for name in demo_items:
+            Registry.getItem(name).postUpdate(NULL)
+
+        # 2) Beispiel-Werte schreiben
+        Registry.getItem("testColor").postUpdate("120,100,100")
+        Registry.getItem("testContact").postUpdate("CLOSED")
+        Registry.getItem("testDateTime").postUpdate(
+            datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f%z")
+        )
+        Registry.getItem("testDimmer").postUpdate("90")
+        Registry.getItem("testNumber").postUpdate("50")
+        Registry.getItem("testPlayer").postUpdate("PAUSE")
+        Registry.getItem("testRollershutter").postUpdate("0")
+        Registry.getItem("testString").postUpdate("Hello World")
+        Registry.getItem("testSwitch").postUpdate("OFF")
+
+        # Location als einfacher lat,lon,alt-String genügt
+        Registry.getItem("testLocation").postUpdate(
+            "48.051437316054006,8.207755911376244,857.0"
+        )
+
+        self.logger.info("Cron rule executed successfully.")
+EOF
+```
 
 ---
 
