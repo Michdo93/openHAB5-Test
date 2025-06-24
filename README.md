@@ -256,6 +256,8 @@ from datetime import datetime
 from openhab           import rule, Registry
 from openhab.triggers  import SystemStartlevelTrigger   # Startlevel-Trigger
 from scope             import NULL                      # Konstanten (ON, OFF, NULL)
+import requests
+import base64
 
 # --------------------------------------------------------------------
 
@@ -290,6 +292,18 @@ class Started:
             "48.051437316054006,8.207755911376244,857.0"
         )
 
+        response = requests.get(
+            "http://127.0.0.1:8080/static/webapps/Image.jpg",
+            auth=("openhab", "habopen")
+        )
+        response.raise_for_status()
+
+        # Base64-kodieren und vorbereiten
+        encoded_string = base64.b64encode(response.content).decode('utf-8').replace("\r\n", "")
+        image_data_url = "data:image/jpg;base64," + encoded_string
+
+        Registry.getItem("testImage").postUpdate(image_data_url)
+
         self.logger.info("Started rule executed successfully.")
 EOF
 ```
@@ -302,6 +316,8 @@ from datetime import datetime
 from openhab           import rule, Registry
 from openhab.triggers  import GenericCronTrigger   # Startlevel-Trigger
 from scope             import NULL                      # Konstanten (ON, OFF, NULL)
+import requests
+import base64
 
 # --------------------------------------------------------------------
 
@@ -324,6 +340,19 @@ class Cron:
         Registry.getItem("testLocation").postUpdate(
             "48.051437316054006,8.207755911376244,857.0"
         )
+
+        response = requests.get(
+            "http://127.0.0.1:8080/static/webapps/Image.jpg",
+            auth=("openhab", "habopen")
+        )
+        response.raise_for_status()
+
+        # Base64-kodieren und vorbereiten
+        encoded_string = base64.b64encode(response.content).decode('utf-8').replace("\r\n", "")
+        image_data_url = "data:image/jpg;base64," + encoded_string
+
+        Registry.getItem("testImage").postUpdate(image_data_url)
+
 
         self.logger.info("Cron rule executed successfully.")
 EOF
