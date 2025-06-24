@@ -48,6 +48,13 @@ Java(TM) SE Runtime Environment Oracle GraalVM 21.0.6+8.1 (build 21.0.6+8-LTS-jv
 Java HotSpot(TM) 64-Bit Server VM Oracle GraalVM 21.0.6+8.1 (build 21.0.6+8-LTS-jvmci-23.1-b55, mixed mode, sharing)
 ```
 
+### 🔹 JAVA_HOME-Variable setzen
+
+```bash
+sudo sed -i '/^JAVA_HOME=/d' /etc/environment && echo 'JAVA_HOME="/usr/lib/jvm/graalvm21"' | sudo tee -a /etc/environment
+sudo reboot
+```
+
 ---
 
 ## 🧱 3. openHAB 5 installieren
@@ -116,15 +123,10 @@ sudo timedatectl set-timezone Europe/Berlin
 
 ### 🔹 openHAB-spezifisch (optional)
 
-```bash
-sudo nano /etc/default/openhab
-```
-
-Dort ergänzen:
+Wir fügen nun `-Duser.timezone=Europe/Berlin` in der Variable `EXTRA_JAVA_OPTS` in der `/etc/default/openhab`-Datei hinzu:
 
 ```ini
-JAVA_HOME="/usr/lib/jvm/graalvm21"
-EXTRA_JAVA_OPTS="-Duser.timezone=Europe/Berlin"
+sudo sed -i '/^EXTRA_JAVA_OPTS=/d' /etc/default/openhab && echo 'EXTRA_JAVA_OPTS="-Duser.timezone=Europe/Berlin"' | sudo tee -a /etc/default/openhab
 ```
 
 ---
