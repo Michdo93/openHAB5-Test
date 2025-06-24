@@ -83,10 +83,26 @@ sudo apt install openhab openhab-addons -y
 ### 🔹 openHAB aktivieren und starten
 
 ```bash
-sudo systemctl enable --now openhab
+sudo systemctl start openhab
+sudo systemctl enable openhab
 ```
 
 > Danach erreichbar unter: [http://localhost:8080](http://localhost:8080)
+
+### 🔹 Repository umstellen
+
+```bash
+sudo rm /etc/apt/sources.list.d/openhab.list
+echo "deb [signed-by=/usr/share/keyrings/openhab.gpg] https://openhab.jfrog.io/artifactory/openhab-linuxpkg testing main" | \
+  sudo tee /etc/apt/sources.list.d/openhab.list
+```
+
+### 🔹 Paketliste aktualisieren und openHAB installieren
+
+```bash
+sudo apt update
+sudo apt install openhab
+```
 
 ---
 
