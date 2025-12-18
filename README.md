@@ -5,7 +5,7 @@ Tests mit openHAB 5 und GraalPy.
 
 # Installation
 
-Hier ist eine **vollständige Schritt-für-Schritt-Anleitung**, wie du **openHAB 5** auf einem **Ubuntu 22.04+** System mit dem **GraalVM JDK 21** installierst – inklusive Setup von Zeitzone, Performance-Optimierung, und Integration des **Python 3 (GraalPy) Scripting Bindings**.
+Hier ist eine **vollständige Schritt-für-Schritt-Anleitung**, wie du **openHAB 5** auf einem **Ubuntu 24.04+** System mit dem **GraalVM JDK 21** installierst – inklusive Setup von Zeitzone, Performance-Optimierung, und Integration des **Python 3 (GraalPy) Scripting Bindings**.
 
 ---
 
@@ -71,20 +71,19 @@ sudo chmod u=rw,g=r,o=r /usr/share/keyrings/openhab.gpg
 ### 🔹 Hinzufügen des HTTPS-Transports für APT
 
 ```bash
-sudo apt-get install apt-transport-https
+sudo apt-get install apt-transport-https -y
 ```
 
 ### 🔹 Hinzufügen des Repositories
 
 ```bash
-echo 'deb [signed-by=/usr/share/keyrings/openhab.gpg] https://openhab.jfrog.io/artifactory/openhab-linuxpkg testing main' | sudo tee /etc/apt/sources.list.d/openhab.list
+echo 'deb [signed-by=/usr/share/keyrings/openhab.gpg] https://openhab.jfrog.io/artifactory/openhab-linuxpkg stable main' | sudo tee /etc/apt/sources.list.d/openhab.list
 ```
 
 ### 🔹 openHAB + Add-ons installieren
 
 ```bash
-sudo apt update
-sudo apt install openhab openhab-addons -y
+sudo apt update && sudo apt install openhab openhab-addons -y
 ```
 
 ### 🔹 openHAB aktivieren und starten
@@ -95,21 +94,6 @@ sudo systemctl enable openhab
 ```
 
 > Danach erreichbar unter: [http://localhost:8080](http://localhost:8080)
-
-### 🔹 Repository umstellen
-
-```bash
-sudo rm /etc/apt/sources.list.d/openhab.list
-echo "deb [signed-by=/usr/share/keyrings/openhab.gpg] https://openhab.jfrog.io/artifactory/openhab-linuxpkg testing main" | \
-  sudo tee /etc/apt/sources.list.d/openhab.list
-```
-
-### 🔹 Paketliste aktualisieren und openHAB installieren
-
-```bash
-sudo apt update
-sudo apt install openhab
-```
 
 ---
 
@@ -134,18 +118,21 @@ sudo sed -i '/^EXTRA_JAVA_OPTS=/d' /etc/default/openhab && echo 'EXTRA_JAVA_OPTS
 ## 🧠 5. Python 3 Binding installieren (GraalPy)
 
 > [!WARNING]  
+> Wir installieren das  **Python Scrupting Next** Binding und nicht das **Python Scripting** Binding, obwohl es experimentell ist. Es bietet aber die Möglichkeit pip-Pakete über ein venv zu installieren.
+
+> [!WARNING]  
 > Es darf nicht gleichzeitig JS Scripting installiert sein!
 
 > In der **Main UI**:
 > → *Settings* → *Add-on Store* → *Automation* →
-> 🔍 **“Python 3 Scripting”** → Installieren
+> 🔍 **“Python Scripting Next”** → Installieren
 
 **Alternativ per Konsole:**
 
 Zunächst installieren wir sshpass:
 
 ```bash
-sudo apt install -y sshpass
+sudo apt install sshpass -y
 ```
 
 Dann fügen wir den Fingerprint automatisch hinzu und speichern ihn:
@@ -157,7 +144,7 @@ sshpass -p habopen ssh -p 8101 -o StrictHostKeyChecking=accept-new openhab@local
 Zuletzt installieren wir das Binding:
 
 ```bash
-sshpass -p habopen ssh -p 8101 -o StrictHostKeyChecking=no openhab@localhost 'feature:install openhab-automation-pythonscripting'
+sshpass -p habopen ssh -p 8101 -o StrictHostKeyChecking=no openhab@localhost 'feature:install marketplace-openhab-automation-pythonscripting'
 ```
 
 ---
