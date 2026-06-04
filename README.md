@@ -718,6 +718,15 @@ Als letzten Schritt müssen die Ordner `/etc/openhab/automation/python/libs/` un
 
 ![Auto-Completion](https://github.com/openhab/openhab-addons/raw/main/bundles/org.openhab.automation.pythonscripting/doc/ide_autocompletion.png)
 
+## 👽 14. Logging aktivieren
+
+In der Karaf-Konsole muss man explizit das Logging aktivieren. Ohne das Logging sieht man nicht die internen Fehler von Python. Oder in anderen Worten ausgedrückt: Ich würde nur Events in openHAB sehen, wenn dies ausgeführt werden oder nicht ausgeführt werden, ob aber eine Rule vorher schon Fehler wirft, sehe ich nicht. Ich sehe in openHAB vielleicht, ob die Rule vorhanden ist, aber beim Hinzufügen der Rule sehe ich nicht, warum es scheitert, wenn eine Rule doch nicht hinzugefügt werden kann.
+
+In `Karaf` setzen wir entsprechend das `Log Level` für uns `Python Scripting Next Binding`:
+
+```
+openhab> log:set DEBUG org.openhab.automation.pythonscripting
+```
 
 ## ✅ Zusammenfassung
 
